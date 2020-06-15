@@ -66,7 +66,7 @@ export default {
 				return [];
 			}
 
-			return _.orderBy(this.batches, ['created_at', 'id']).map(b => ({
+			return _.orderBy(this.batches, ['created_at', 'id'], ['desc', 'asc']).map(b => ({
 				id: b.id,
 				quantity: b.quantity,
 				amount: b.amount,
