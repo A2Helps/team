@@ -10,7 +10,7 @@
 				@keyup="update"
 			/>
 		</b-form-group>
-		<span class="text-success" v-if="saved"> Saved </span>
+		<!-- <span class="text-success" v-if="saved"> Saved </span> -->
 	</b-col>
 </template>
 

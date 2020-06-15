@@ -18,10 +18,15 @@
 				<batch-item :id="item.id" :index="i + 1" />
 			</b-row>
 
-			<b-button type="submit" variant="primary" v-if="!processing" :disabled="!complete">
-				Submit
-			</b-button>
-			<b-spinner v-else />
+			<div class="mt-4">
+				<b-button type="submit" variant="primary" v-if="!processing" :disabled="!complete">
+					Complete Batch
+				</b-button>
+				<b-spinner v-else />
+				<div class="mt-2">
+					<small class="text-muted"> Card info saves automatically. </small>
+				</div>
+			</div>
 		</b-form>
 	</b-card>
 </template>
