@@ -1,37 +1,47 @@
 <template>
 	<b-card title="Batches">
 		<b-spinner v-if="loading" />
-		<b-table hover small :fields="fields" :items="items" responsive="sm" v-else>
-			<template v-slot:cell(merchant)="data">
-				<b class="text-info">{{ data.value }}</b>
-			</template>
-
-			<template v-slot:cell(amount)="data"> ${{ Math.floor(data.value / 100) }} </template>
-
-			<template v-slot:cell(status)="data">
-				<span v-if="data.item.completed" class="text-success">
-					Complete
-				</span>
-
-				<router-link
-					:to="{ name: 'batch', params: { id: data.item.id } }"
-					v-else-if="data.item.assigned_to_me"
-				>
-					<b-button variant="warning">
-						Fulfill
-						<b-icon-chevron-right />
+		<template v-else>
+			<b-row class="mb-3" d-flex align-v="center" align-h="end">
+				<b-col class="text-right">
+					<span class="text-muted"> (Showing {{ all ? 'All' : 'Completed' }}) </span>
+					<b-button variant="light" @click="all = !all">
+						Show {{ !all ? 'All' : 'Completed' }}
 					</b-button>
-				</router-link>
+				</b-col>
+			</b-row>
+			<b-table hover small :fields="fields" :items="items" responsive="sm">
+				<template v-slot:cell(merchant)="data">
+					<b class="text-info">{{ data.value }}</b>
+				</template>
 
-				<span class="text-secondary" v-else-if="data.item.assigned_to">
-					Assigned
-				</span>
+				<template v-slot:cell(amount)="data"> ${{ Math.floor(data.value / 100) }} </template>
 
-				<b-button variant="outline-primary" @click="assign(data.item.id)" v-else>
-					Assign to Me
-				</b-button>
-			</template>
-		</b-table>
+				<template v-slot:cell(status)="data">
+					<span v-if="data.item.completed" class="text-success">
+						Complete
+					</span>
+
+					<router-link
+						:to="{ name: 'batch', params: { id: data.item.id } }"
+						v-else-if="data.item.assigned_to_me"
+					>
+						<b-button variant="warning">
+							Fulfill
+							<b-icon-chevron-right />
+						</b-button>
+					</router-link>
+
+					<span class="text-secondary" v-else-if="data.item.assigned_to">
+						Assigned
+					</span>
+
+					<b-button variant="outline-primary" @click="assign(data.item.id)" v-else>
+						Assign to Me
+					</b-button>
+				</template>
+			</b-table>
+		</template>
 	</b-card>
 </template>
 
@@ -52,7 +62,8 @@ export default {
 	data: () => ({
 		loading: true,
 
-		fields: ['merchant', 'quantity', 'amount', 'status']
+		fields: ['merchant', 'quantity', 'amount', 'status'],
+		all: false
 	}),
 
 	computed: {
@@ -78,13 +89,29 @@ export default {
 		}
 	},
 
+	watch: {
+		all: function() {
+			this.fetch();
+		}
+	},
+
 	mounted() {
 		this.prep();
 	},
 
 	methods: {
 		async prep() {
-			await this.$store.dispatch('Batch/fetchAll');
+			this.fetch();
+		},
+
+		async fetch() {
+			let timer = setTimeout(() => (this.loading = true), 300);
+
+			this.$store.commit('Batch/DELETE_ALL');
+			this.$store.commit('BatchItem/DELETE_ALL');
+			await this.$store.dispatch('Batch/fetchAll', { all: this.all });
+
+			clearTimeout(timer);
 			this.loading = false;
 		},
 

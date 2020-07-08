@@ -113,6 +113,14 @@ const actions = {
 				resolve();
 			});
 		});
+	},
+
+	async fetchStats({ rootGetters }) {
+		return new Promise(resolve => {
+			axios.get(rootGetters['App/apiUrl'] + '/v1/_/stats').then(response => {
+				resolve(response.data);
+			});
+		});
 	}
 };
 

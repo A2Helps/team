@@ -22,6 +22,9 @@
 						<b-nav-item :to="{ name: 'merchants' }" :active="$route.name === 'merchants'">
 							Merchants
 						</b-nav-item>
+						<b-nav-item :to="{ name: 'support' }" :active="$route.name === 'support'">
+							Support
+						</b-nav-item>
 						<b-nav-item :to="{ name: 'team' }" :active="$route.name === 'team'" v-if="isAdmin">
 							Team
 						</b-nav-item>

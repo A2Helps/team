@@ -15,10 +15,16 @@ const mutations = Object.assign(crud.Mutations, {});
 const getters = Object.assign(crud.Getters, {});
 
 const actions = {
-	async fetchAll({ commit }) {
+	async fetchAll({ commit }, { all }) {
 		log.debug(`Store/Batch@fetchAll: fetching all Batches`);
 
-		let batches = await Batch.include(['batch_items', 'merchant']).get();
+		let query = Batch.include(['batch_items', 'merchant']);
+
+		if (!all) {
+			query.where('completed', false);
+		}
+
+		const batches = await query.get();
 
 		let merchants = [];
 		let batchItems = [];

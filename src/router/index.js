@@ -58,6 +58,12 @@ const routes = [
 		meta: { requiresAuth }
 	},
 	{
+		path: '/support',
+		name: 'support',
+		component: require('@/views/Support').default,
+		meta: { requiresAuth }
+	},
+	{
 		path: '/about',
 		name: 'About',
 		// route level code-splitting
