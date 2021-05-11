@@ -14,7 +14,7 @@
     "core-js": "^3.6.4",
     "decamelize": "^4.0.0",
     "firebase": "^7.14.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "loglevel": "^1.6.8",
     "pluralize": "^8.0.0",
     "qs": "^6.9.4",
